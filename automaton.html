@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>automaton</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #333;
+        padding: 5px;
+        text-align: center;
+        min-width: 50px;
+      }
+      button {
+        margin: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>オートマトン状態遷移表</h2>
+    <div>
+      <button id="add_state_button">状態追加</button>
+      <button id="add_symbol_button">入力記号追加</button>
+    </div>
+
+    <div id="editable"></div>
+
+    <button id="epsilon_nfa_to_dfa_button">DFAに変換</button>
+    <button id="minimize_dfa_button">最簡形DFAに変換</button>
+
+    <p>DFA:</p>
+    <div id="converted"></div>
+
+    <p>最簡形DFA:</p>
+    <div id="minimized"></div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
