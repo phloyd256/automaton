@@ -35,13 +35,18 @@ function renderTable(nfa) {
   // ヘッダーの作成
   for (let i = 0; i < columCount; i++) {
     const th = document.createElement("th");
+    
     if (i === 0) {
+      th.style.width = "200px";
       th.innerHTML = "状態";
     } else if (i === 1) {
+      th.style.width = "70px";
       th.innerHTML = "初期状態";
     } else if (i === 2) {
+      th.style.width = "70px";
       th.innerHTML = "受理状態";
     } else if (i < columCount - 1) {
+      th.style.width = "200px";
       // 入力欄
       const input = document.createElement("input");
       input.type = "text";
@@ -63,6 +68,7 @@ function renderTable(nfa) {
       // ボタンをセルに追加
       th.appendChild(button);
     } else {
+      th.style.width = "200px";
       th.innerHTML = "ε-動作";
     }
     // セルを行に追加
@@ -84,7 +90,18 @@ function renderTable(nfa) {
         input.value = nfa.states[i];
         // 状態名を更新
         input.addEventListener("input", () => {
-          nfa.states[i] = input.value;
+          const oldName = nfa.states[i];
+          const newName = input.value;
+          // 初期状態の更新
+          if (nfa.initial === oldName){
+            nfa.initial = newName;
+          }
+          // 受理状態の更新
+          if (nfa.accept.includes(oldName)) {
+            nfa.accept = nfa.accept.map(st => st === oldName ? newName : st);
+          }
+          // 状態名の更新
+          nfa.states[i] = newName;
         });
         // 入力欄をセルに追加
         td.appendChild(input);
@@ -123,7 +140,11 @@ function renderTable(nfa) {
         }
         // 受理状態を更新
         input.addEventListener("change", () => {
-          if (input.checked) nfa.accept.push(nfa.states[i]);
+          if (input.checked) {
+            nfa.accept.push(nfa.states[i]);
+          } else if (!input.checked && nfa.accept.includes(nfa.states[i])) {
+            nfa.accept = nfa.accept.filter(name => name !== nfa.states[i])
+          }
         });
         // チェックボックスをセルに追加
         td.appendChild(input);
@@ -141,6 +162,8 @@ function renderTable(nfa) {
           // 入力欄をセルに追加
           td.appendChild(input);
         }
+        // ボタンを入れるdiv
+        const button_container = document.createElement("div");
         // 追加ボタン
         const add_button = document.createElement("button");
         add_button.textContent = "追加";
@@ -149,8 +172,8 @@ function renderTable(nfa) {
           nfa.transition[i][j - 3].push("");
           renderTable(nfa);
         });
-        // 追加ボタンをセルに追加
-        td.appendChild(add_button);
+        // 追加ボタンをdivに追加
+        button_container.appendChild(add_button);
         // 削除ボタン
         const delete_button = document.createElement("button");
         delete_button.textContent = "削除";
@@ -161,8 +184,10 @@ function renderTable(nfa) {
           }
           renderTable(nfa);
         });
-        // 削除ボタンをセルに追加
-        td.appendChild(delete_button);
+        // 削除ボタンをdivに追加
+        button_container.appendChild(delete_button);
+        // divをセルに追加
+        td.appendChild(button_container);
       }
       // セルを行に追加
       tr.appendChild(td);
@@ -670,5 +695,4 @@ document.getElementById("minimize_dfa_button").addEventListener("click", () => {
   min_dfa_A = minimize_dfa(dfa_A);
   ordered_min_dfa_A = order_states(min_dfa_A);
   putTable(ordered_min_dfa_A,"minimized");
-
 });
