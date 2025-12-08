@@ -400,7 +400,7 @@ function epsilon_nfa_to_dfa(nfa) {
   while (queue.length > 0) {
     const currentSet = queue.shift();
     const currentName =
-      currentSet.length === 0 ? "Φ" : currentSet.sort().join(",");
+      currentSet.length === 0 ? "∅" : currentSet.sort().join(",");
     const rowIndex = dfa.states.indexOf(currentName);
 
     // 各入力記号ごとに遷移後の状態を調べる
@@ -423,7 +423,7 @@ function epsilon_nfa_to_dfa(nfa) {
       // さらにε-閉包
       const closureSet = epsilon_closure(nfa, Array.from(moveSet));
       const closureName =
-        closureSet.length === 0 ? "Φ" : closureSet.sort().join(",");
+        closureSet.length === 0 ? "∅" : closureSet.sort().join(",");
 
       // 遷移を記録
       if (!dfa.transition[rowIndex]) dfa.transition[rowIndex] = [];
@@ -441,7 +441,7 @@ function epsilon_nfa_to_dfa(nfa) {
 
   // 受理状態を決定
   for (const st of dfa.states) {
-    if (st === "Φ") continue;
+    if (st === "∅") continue;
     const group = st.split(",");
     if (group.some((s) => nfa.accept.includes(s))) {
       dfa.accept.push(st);
@@ -601,7 +601,7 @@ function minimize_dfa(dfa) {
       // 元状態の遷移
       const q_index = states.indexOf(representative);
       const next_states = transition[q_index][j];
-      const next_state = next_states.length > 0 ? next_states[0] : "Φ";
+      const next_state = next_states.length > 0 ? next_states[0] : "∅";
       row.push([block_map[next_state]]);
     });
     row.push([]); // ε-動作
