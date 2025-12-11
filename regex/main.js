@@ -114,8 +114,6 @@ function display_output() {
     // 構文木を生成
     const parser = new Parser(input_regex.value);
     const ast = parser.parse();
-    // 表示
-    document.getElementById("parse_tree").textContent = JSON.stringify(ast, null, 2);
 
     const nfa = buildNFA(ast, alphabet); // ε-NFA
     const dfa = epsilon_nfa_to_dfa(nfa); // DFA
