@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>正規表現</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #333;
+        padding: 5px;
+        text-align: center;
+        min-width: 50px;
+      }
+      button {
+        margin: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>正規表現</h2>
+    <div style="margin: 16px 0px">
+      <button id="add_symbol_button">入力記号追加</button>
+    </div>
+
+    <div id="alphabet_wrap"></div>
+
+    <div style="margin: 16px 0px">
+      <button id="renew">更新</button>
+    </div>
+
+    <div id="buttons_wrap"></div>
+    <input type="text" id="input_regex" />
+    <button id="delete_regex_button">消去</button>
+    <button id="delete_all_regex_button">全て消去</button>
+
+    <div></div>
+
+    <div style="margin: 16px 0px">
+      <button id="minimize_dfa_button">最簡形DFAに変換</button>
+    </div>
+    <p>最簡形DFA:</p>
+    <div id="minimized_dfa"></div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
