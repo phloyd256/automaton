@@ -21,6 +21,9 @@ function newState() {
 
 // 構文木からNFAを生成
 function buildNFA(node, alphabet) {
+    if (!node) {
+        throw new Error("buildNFA: parse tree is null or undefined");
+    }
     stateCount = 0;  // リセット
 
     // NFAを生成
@@ -43,7 +46,7 @@ function build(node, alphabet) {
         case "star":
             return buildStar(build(node.expr, alphabet));
         default:
-            throw "unknown node type: " + node.type; // エラー
+            throw new Error("unknown node type: " + node.type);
     }
 }
 
@@ -51,6 +54,11 @@ function build(node, alphabet) {
 
 // 文字
 function buildChar(ch, alphabet) {
+    const chIndex = alphabet.indexOf(ch);
+    if (chIndex === -1) {
+        throw new Error("character '" + ch + "' is not in the alphabet: [" + alphabet.join(", ") + "]");
+    }
+
     let s = newState();
     let t = newState();
 
@@ -58,7 +66,7 @@ function buildChar(ch, alphabet) {
     let states = [s, t];
     // 遷移関数
     let transition = makeTransition(states.length, alphabet.length);
-    transition[states.indexOf(s)][alphabet.indexOf(ch)].push(t);
+    transition[states.indexOf(s)][chIndex].push(t);
     // 初期状態
     let initial = s;
     // 受理状態集合

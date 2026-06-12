@@ -11,7 +11,10 @@ function epsilon_closure(nfa, states) {
     while (stack.length > 0) {
         const state = stack.pop(); // 要素（状態）を取得
         const i = nfa.states.indexOf(state); // その状態のindexを取得
-        if (i === -1) continue; // 要素が見つからなかったら次のループへ
+        if (i === -1) {
+            console.warn("epsilon_closure: state '" + state + "' not found in states array");
+            continue;
+        }
     
         const epsTransitions = nfa.transition[i][epsilonIndex]; // ε遷移を取得
     
@@ -67,7 +70,10 @@ function epsilon_nfa_to_dfa(nfa) {
             // currentSet 内の各状態に対してシンボル遷移
             for (const s of currentSet) {
                 const i = nfa.states.indexOf(s);
-                if (i === -1) continue;
+                if (i === -1) {
+                    console.warn("epsilon_nfa_to_dfa: state '" + s + "' not found in NFA states");
+                    continue;
+                }
         
                 const nextArr = nfa.transition[i][symIndex];
                 if (!nextArr) continue;
@@ -133,7 +139,10 @@ function next_equivalence(P, dfa) {
             for (let a of alphabet) {
                 // 状態qのインデックスを取得
                 let q_index = states.indexOf(q);
-                if (q_index === -1) continue;
+                if (q_index === -1) {
+                    console.warn("next_equivalence: state '" + q + "' not found in DFA states");
+                    continue;
+                }
         
                 // 遷移先の取得
                 let next_states = transition[q_index][alphabet.indexOf(a)];
@@ -254,7 +263,11 @@ function minimize_dfa(dfa) {
             const q_index = states.indexOf(representative);
             const next_states = transition[q_index][j];
             const next_state = next_states.length > 0 ? next_states[0] : "∅";
-            row.push([block_map[next_state]]);
+            const mapped = block_map[next_state];
+            if (mapped === undefined) {
+                console.warn("minimize_dfa: no block mapping for state '" + next_state + "'");
+            }
+            row.push([mapped !== undefined ? mapped : next_state]);
         });
         row.push([]); // ε-動作
         min_transition.push(row);
@@ -407,6 +420,9 @@ function simplify_state_name(nfa) {
 // 状態遷移表（結果）を作成
 function putTable(dfa, id) {
     const table_wrap = document.getElementById(id);
+    if (!table_wrap) {
+        throw new Error("putTable: element '#" + id + "' not found");
+    }
     table_wrap.innerHTML = ""; // 初期化
     const table = document.createElement("table");
     const thead = document.createElement("thead");
