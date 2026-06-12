@@ -430,7 +430,7 @@ function putTable(dfa, id) {
         } else if (i === 2) {
             th.innerHTML = "受理状態";
         } else if (i < columCount - 1) {
-            th.innerHTML = dfa.alphabet[i - 3];
+            th.textContent = dfa.alphabet[i - 3];
         } else {
             th.innerHTML = "ε-動作"; // いらない
         }
@@ -446,7 +446,7 @@ function putTable(dfa, id) {
         for (let j = 0; j < columCount; j++) {
             const td = document.createElement("td");
             if (j === 0) {
-                td.innerHTML = dfa.states[i];
+                td.textContent = dfa.states[i];
             } else if (j === 1) {
                 // 初期状態に印
                 if (dfa.states[i] === dfa.initial) {
@@ -458,7 +458,7 @@ function putTable(dfa, id) {
                     td.innerHTML = "〇";
                 }
             } else if (j <= columCount - 2) {
-                td.innerHTML = dfa.transition[i][j - 3][0];
+                td.textContent = dfa.transition[i][j - 3][0];
             } else {
                 td.innerHTML = "";
             }
