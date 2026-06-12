@@ -111,17 +111,31 @@ function display_buttons(a) {
 
 // DFAと構文木を表示
 function display_output() {
-    // 構文木を生成
-    const parser = new Parser(input_regex.value);
-    const ast = parser.parse();
+    const outputEl = document.getElementById("minimized_dfa");
+    if (!outputEl) {
+        console.error("display_output: element #minimized_dfa not found");
+        return;
+    }
+    try {
+        // 構文木を生成
+        const parser = new Parser(input_regex.value);
+        const ast = parser.parse();
 
-    const nfa = buildNFA(ast, alphabet); // ε-NFA
-    const dfa = epsilon_nfa_to_dfa(nfa); // DFA
-    const min_dfa = minimize_dfa(dfa); // 最簡形DFA
-    const ordered_min_dfa = order_states(min_dfa); // 整序後のDFA
-    const simplified_dfa = simplify_state_name(ordered_min_dfa);
-    // 状態遷移表を表示
-    putTable(simplified_dfa, "minimized_dfa");
+        const nfa = buildNFA(ast, alphabet); // ε-NFA
+        const dfa = epsilon_nfa_to_dfa(nfa); // DFA
+        const min_dfa = minimize_dfa(dfa); // 最簡形DFA
+        const ordered_min_dfa = order_states(min_dfa); // 整序後のDFA
+        const simplified_dfa = simplify_state_name(ordered_min_dfa);
+        // 状態遷移表を表示
+        putTable(simplified_dfa, "minimized_dfa");
+    } catch (e) {
+        outputEl.innerHTML = "";
+        const errMsg = document.createElement("p");
+        errMsg.style.color = "red";
+        errMsg.textContent = "エラー: " + (e instanceof Error ? e.message : String(e));
+        outputEl.appendChild(errMsg);
+        console.error("display_output:", e);
+    }
 }
 
 // 表示

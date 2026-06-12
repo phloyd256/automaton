@@ -95,7 +95,9 @@ class Parser {
         if(c === '('){
             this.tok.next();
             const node = this.parseAlt();
-            if(this.tok.peek() !== ')') throw "expected )";
+            if(this.tok.peek() !== ')') {
+                throw new Error("expected ')' at position " + this.tok.pos + ", got: " + (this.tok.peek() || "end of input"));
+            }
             this.tok.next();
             return node;
         }
@@ -105,6 +107,6 @@ class Parser {
             return new CharNode(c);
         }
 
-        throw "unexpected char: " + c;
+        throw new Error("unexpected char: '" + c + "' at position " + this.tok.pos);
     }
 }
